@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Ashley EQ Lab - Science & Tech</title>
+<style>
+:root{
+  --bg:#05070a;--panel:#0f1219;--border:#1e2433;--accent:#ff6b35;
+  --blue:#00c8ff;--green:#22d966;--red:#ff4455;--text:#e2e8f0;--dim:#64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:13px;padding-bottom:50px}
+
+/* HEADER TECH style */
+.hdr{background:linear-gradient(to bottom, #11151f, #05070a);padding:20px;text-align:center;border-bottom:2px solid var(--accent);box-shadow:0 0 20px rgba(255,107,53,0.2)}
+.hdr h1{font-size:18px;letter-spacing:3px;color:var(--accent)}
+
+/* AUDIO ENGINE SWITCH */
+.audio-ctrl{background:var(--panel);margin:10px;padding:15px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.btn-audio{padding:10px 20px;background:var(--accent);border:none;border-radius:5px;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 0 10px var(--accent)}
+
+/* EQ INTERFACE */
+.eq-container{background:var(--panel);margin:10px;padding:15px;border-radius:12px;border:1px solid var(--border)}
+.bands{display:flex;gap:5px;height:240px;align-items:flex-end;margin-bottom:20px}
+.band-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
+.track{width:35px;height:160px;background:#000;border-radius:4px;position:relative;border:1px solid var(--border)}
+.knob{width:100%;height:20px;background:var(--accent);position:absolute;left:0;border-radius:3px;cursor:grab;z-index:5;box-shadow:0 0 15px var(--accent)}
+.db-display{font-size:10px;font-weight:bold;margin-bottom:5px;color:var(--blue)}
+.freq-label{font-size:10px;margin-top:10px;font-weight:bold}
+
+/* DYNAMIC ANALYSIS TEXT */
+.analysis-box{background:#000;padding:15px;margin:10px;border-radius:10px;border-left:4px solid var(--blue);min-height:80px}
+.analysis-title{font-size:11px;color:var(--dim);text-transform:uppercase;margin-bottom:5px}
+.analysis-text{font-size:14px;line-height:1.5;color:var(--text)}
+
+canvas{width:100%;height:80px;background:#000;border-radius:5px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+    <h1>ASHLEY SELECTION-8</h1>
+    <p style="font-size:9px;color:var(--dim)">PRO AUDIO ANALYSIS LABORATORY</p>
+</div>
+
+<div class="audio-ctrl">
+    <div>
+        <div style="font-weight:bold">Audio Generator</div>
+        <div style="font-size:10px;color:var(--dim)">Dengarkan Frekuensi Nyata</div>
+    </div>
+    <button class="btn-audio" id="toggleAudio">MULAI AUDIO</button>
+</div>
+
+<div class="eq-container">
+    <div class="bands" id="bandCont"></div>
+    <canvas id="curve"></canvas>
+</div>
+
+<div class="analysis-box">
+    <div class="analysis-title">🔍 AI Real-time Analysis</div>
+    <div id="aiText" class="analysis-text">Geser slider untuk melihat efek pada suara...</div>
+</div>
+
+<script>
+const BANDS = [
+    {f:'63Hz', n:'Sub', descL:'Bass hilang, suara tipis.', descH:'Gedeuk mantap, hati-hati speaker pecah!'},
+    {f:'160Hz', n:'Bass', descL:'Suara kering/flat.', descH:'Hangat, tapi kalau lebih suara jadi berdengung.'},
+    {f:'400Hz', n:'Low-Mid', descL:'Suara jernih, ruang terbuka.', descH:'Hati-hati! Suara jadi mendem/mengkungkung.'},
+    {f:'1kHz', n:'Mid', descL:'Vokal tenggelam.', descH:'Kejelasan kata meningkat, suara lebih "hadir".'},
+    {f:'2.5kHz', n:'Presence', descL:'Suara kusam.', descH:'Suara tajam dan tegas, bagus untuk artikulasi.'},
+    {f:'6.3kHz', n:'Detail', descL:'Kurang renyah.', descH:'Suara "Cis-Cis" keluar, sangat detail.'},
+    {f:'16kHz', n:'Air', descL:'Suara mati/tertutup.', descH:'Kilau kristal, suara terasa sangat mewah.'}
+];
+
+let vals = [0,0,0,0,0,0,0];
+let audioCtx = null;
+let oscillators = [];
+let gains = [];
+let isPlaying = false;
+
+function init() {
+    const cont = document.getElementById('bandCont');
+    BANDS.forEach((b, i) => {
+        const col = document.createElement('div');
+        col.className = 'band-col';
+        col.innerHTML = `
+            <div class="db-display" id="db-${i}">0 dB</div>
+            <div class="track" onmousedown="startDrag(event, ${i})" ontouchstart="startDrag(event, ${i})">
+                <div class="knob" id="knob-${i}" style="top:50%; transform:translateY(-50%)"></div>
+            </div>
+            <div class="freq-label" style="color:var(--accent)">${b.f}</div>
+            <div style="font-size:8px;color:var(--dim)">${b.n}</div>
+        `;
+        cont.appendChild(col);
+    });
+    updateUI();
+}
+
+function startDrag(e, index) {
+    const track = e.currentTarget;
+    const move = (ev) => {
+        const rect = track.getBoundingClientRect();
+        const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+        let pos = (clientY - rect.top) / rect.height;
+        pos = Math.max(0, Math.min(1, pos));
+        vals[index] = Math.round((0.5 - pos) * 24);
+        updateUI();
+    };
+    const stop = () => {
+        window.removeEventListener('mousemove', move);
+        window.removeEventListener('mouseup', stop);
+        window.removeEventListener('touchmove', move);
+        window.removeEventListener('touchend', stop);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('touchmove', move, {passive:false});
+    window.addEventListener('touchend', stop);
+}
+
+function updateUI() {
+    let globalAnalysis = "";
+    vals.forEach((v, i) => {
+        const knob = document.getElementById(`knob-${i}`);
+        const db = document.getElementById(`db-${i}`);
+        knob.style.top = `${(1 - (v + 12) / 24) * 100}%`;
+        db.innerText = `${v > 0 ? '+' : ''}${v} dB`;
+        db.style.color = v > 8 ? 'var(--red)' : (v < -8 ? 'var(--dim)' : 'var(--blue)');
+        
+        if(Math.abs(v) > 3) {
+            globalAnalysis += `Pada <b>${BANDS[i].f}</b>: ${v > 0 ? BANDS[i].descH : BANDS[i].descL} `;
+        }
+        
+        if(isPlaying && gains[i]) {
+            const gainVal = Math.pow(10, v / 20) * 0.1;
+            gains[i].gain.setTargetAtTime(gainVal, audioCtx.currentTime, 0.1);
+        }
+    });
+
+    document.getElementById('aiText').innerHTML = globalAnalysis || "Semua frekuensi rata (Flat). Suara asli tanpa modifikasi.";
+    drawCurve();
+}
+
+function drawCurve() {
+    const canvas = document.getElementById('curve');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.offsetWidth;
+    const h = canvas.height = canvas.offsetHeight;
+    
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle = 'var(--accent)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    
+    const points = vals.map((v, i) => ({
+        x: (i / 6) * (w - 40) + 20,
+        y: (1 - (v + 12) / 24) * h
+    }));
+
+    ctx.moveTo(points[0].x, points[0].y);
+    for(let i=0; i<points.length-1; i++) {
+        var xc = (points[i].x + points[i+1].x) / 2;
+        var yc = (points[i].y + points[i+1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+    }
+    ctx.stroke();
+}
+
+document.getElementById('toggleAudio').onclick = function() {
+    if(!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const freqs = [63, 160, 400, 1000, 2500, 6300, 12000];
+        freqs.forEach((f, i) => {
+            let osc = audioCtx.createOscillator();
+            let g = audioCtx.createGain();
+            osc.frequency.value = f;
+            osc.type = 'sine';
+            g.gain.value = 0;
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start();
+            oscillators.push(osc);
+            gains.push(g);
+        });
+    }
+
+    if(!isPlaying) {
+        audioCtx.resume();
+        this.innerText = "MATIKAN AUDIO";
+        this.style.background = "var(--red)";
+        isPlaying = true;
+        updateUI();
+    } else {
+        gains.forEach(g => g.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1));
+        this.innerText = "MULAI AUDIO";
+        this.style.background = "var(--accent)";
+        isPlaying = false;
+    }
+};
+
+window.onload = init;
+</script>
+</body>
+</html>
