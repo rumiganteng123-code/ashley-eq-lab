@@ -107,9 +107,94 @@ canvas{display:block;width:100%;height:80px}
   .t-grid{grid-template-columns:repeat(3,1fr)}
   .track{height:160px}
 }
+@media(min-width:480px){
+  .band-cards{grid-template-columns:repeat(3,1fr)}
+  .t-grid{grid-template-columns:repeat(3,1fr)}
+  .track{height:160px}
+}
 @media(min-width:700px){
   .content{max-width:680px;margin:0 auto}
   .band-cards{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ===================== TAMBAHAN BARU ===================== */
+
+/* SECTION DIVIDER */
+.sec-divider{display:flex;align-items:center;gap:10px;margin:18px 0 12px}
+.sec-divider-line{flex:1;height:1px;background:var(--border)}
+.sec-divider-label{font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+
+/* CHANNEL EQ CARD (HIGH MID LOW) */
+.ch-eq-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.ch-eq-title{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.ch-eq-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ch-knob-col{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:80px;max-width:120px}
+.ch-knob-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center}
+.ch-knob-wrap{position:relative;width:60px;height:60px}
+.ch-knob-ring{width:60px;height:60px;border-radius:50%;border:3px solid var(--border);background:radial-gradient(circle at 35% 35%,#1e2330,#0d0f14);position:relative;cursor:pointer;touch-action:none;box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.ch-knob-dot{width:4px;height:4px;border-radius:50%;background:#fff;position:absolute;top:6px;left:50%;transform:translateX(-50%);transition:transform .1s}
+.ch-knob-val{font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;min-height:16px}
+.ch-knob-tip{font-size:9px;color:#5a6478;text-align:center;line-height:1.4;max-width:100px}
+.ch-arc{position:absolute;inset:0;pointer-events:none}
+
+/* FADER SECTION */
+.fader-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.fader-card-title{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.fader-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+.fader-row::-webkit-scrollbar{height:3px}
+.fader-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.fader-col{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:50px}
+.fader-ch-name{font-size:8px;color:var(--dim);text-align:center;letter-spacing:.5px;text-transform:uppercase}
+.fader-track-v{width:18px;height:120px;background:#0a0c10;border:1px solid var(--border);border-radius:3px;position:relative;cursor:pointer;touch-action:none;margin:0 auto}
+.fader-fill-v{position:absolute;left:2px;right:2px;bottom:0;border-radius:2px;transition:height .3s}
+.fader-knob-v{position:absolute;left:50%;transform:translateX(-50%) translateY(-50%);width:calc(100% + 6px);height:14px;border-radius:2px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1);transition:top .3s;cursor:grab}
+.fader-knob-v::after{content:'';width:55%;height:1.5px;background:rgba(255,255,255,.3);border-radius:1px}
+.fader-db-label{font-size:9px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+.fader-unity{position:absolute;left:-3px;right:-3px;height:1px;background:rgba(255,200,0,.3);top:25%}
+.fader-unity-lbl{position:absolute;right:-20px;top:25%;transform:translateY(-50%);font-size:7px;color:rgba(255,200,0,.5);font-weight:700}
+
+/* EFFECTS SECTION */
+.fx-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.fx-card-title{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.fx-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.fx-tab{padding:5px 11px;border-radius:14px;border:1px solid var(--border);background:var(--panel2);color:var(--dim);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.fx-tab.on{color:#fff}
+.fx-body{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.fx-name{font-size:14px;font-weight:800;margin-bottom:4px}
+.fx-sub{font-size:10px;color:var(--dim);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase}
+.fx-desc{font-size:11px;color:#8090a8;line-height:1.6;margin-bottom:10px}
+.fx-params{display:flex;flex-direction:column;gap:6px}
+.fx-param{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.03);border-radius:5px;padding:7px 10px}
+.fx-param-name{font-size:10px;color:var(--text)}
+.fx-param-val{font-size:10px;font-weight:700;font-family:monospace}
+.fx-when{margin-top:10px;background:rgba(255,107,53,.06);border-radius:6px;padding:8px 10px;border-left:2px solid var(--accent)}
+.fx-when-title{font-size:9px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase}
+.fx-when-list{font-size:10px;color:#8090a8;line-height:1.6}
+.fx-warn{margin-top:8px;background:rgba(255,68,85,.06);border-radius:6px;padding:8px 10px;border-left:2px solid var(--red);font-size:10px;color:#ff9aaa;line-height:1.5}
+.fx-knobs-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.fx-knob-mini{display:flex;flex-direction:column;align-items:center;gap:4px}
+.fx-knob-mini-ring{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:radial-gradient(circle at 35% 35%,#1e2330,#0d0f14);position:relative;cursor:pointer;touch-action:none;box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.fx-knob-mini-dot{width:3px;height:3px;border-radius:50%;position:absolute;top:5px;left:50%;transform:translateX(-50%)}
+.fx-knob-mini-label{font-size:8px;color:var(--dim);text-align:center}
+.fx-knob-mini-val{font-size:9px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* CHANNEL STRIP VISUAL */
+.strip-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.strip-title{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.strip-wrap{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.strip-ch{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;min-width:64px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.strip-ch-num{font-size:8px;color:var(--dim);font-weight:700;letter-spacing:1px}
+.strip-gain-dot{width:10px;height:10px;border-radius:50%;border:2px solid}
+.strip-eq-dots{display:flex;flex-direction:column;gap:3px;align-items:center}
+.strip-eq-dot{width:14px;height:4px;border-radius:2px;opacity:.7}
+.strip-sep{width:100%;height:1px;background:var(--border)}
+.strip-fader-mini{width:12px;height:60px;background:#0a0c10;border:1px solid var(--border);border-radius:2px;position:relative;margin:0 auto}
+.strip-fader-k{position:absolute;left:50%;transform:translateX(-50%) translateY(-50%);width:18px;height:10px;background:#3a4055;border-radius:1px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.strip-ch-label{font-size:7px;color:#5a6478;text-align:center;line-height:1.3}
+
+@media(max-width:400px){
+  .ch-knob-ring{width:52px;height:52px}
+  .ch-knob-wrap{width:52px;height:52px}
 }
 </style>
 </head>
@@ -154,6 +239,61 @@ canvas{display:block;width:100%;height:80px}
     <div class="rule">Perubahan kecil ±2dB saja sudah terasa besar di sound system</div>
     <div class="rule">Volume gain channel jangan terlalu tinggi → penyebab utama feedback</div>
   </div>
+
+  <!-- ===== CHANNEL EQ HIGH/MID/LOW ===== -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <div class="sec-divider-label">🎛️ Channel Strip EQ — HIGH · MID · LOW</div>
+    <div class="sec-divider-line"></div>
+  </div>
+  <div class="ch-eq-card">
+    <div class="ch-eq-title"><span>🔘</span> KNOB HIGH · MID · LOW — PUTAR UNTUK SIMULASI</div>
+    <div class="ch-eq-row" id="chEqRow"></div>
+    <div style="margin-top:14px;background:var(--panel2);border-radius:8px;padding:10px 12px">
+      <div style="font-size:11px;color:#8090a8;line-height:1.6" id="chEqDescText">Tap salah satu knob untuk lihat penjelasan detail.</div>
+    </div>
+    <div style="margin-top:10px" id="chEqPreset"></div>
+  </div>
+
+  <!-- ===== FADER SECTION ===== -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <div class="sec-divider-label">📶 Fader — Volume Per Channel</div>
+    <div class="sec-divider-line"></div>
+  </div>
+  <div class="fader-card">
+    <div class="fader-card-title"><span>📶</span> SETTING FADER — GESER UNTUK SIMULASI</div>
+    <div class="fader-row" id="faderRow"></div>
+    <div style="margin-top:12px;background:var(--panel2);border-radius:8px;padding:10px 12px">
+      <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:6px;letter-spacing:1px">📌 PANDUAN FADER</div>
+      <div style="font-size:10px;color:#8090a8;line-height:1.7" id="faderGuide"></div>
+    </div>
+  </div>
+
+  <!-- ===== EFFECTS SECTION ===== -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <div class="sec-divider-label">✨ Effects Processor Ashley Selection-8</div>
+    <div class="sec-divider-line"></div>
+  </div>
+  <div class="fx-card">
+    <div class="fx-card-title"><span>✨</span> EFEK BAWAAN ASHLEY — TAP UNTUK DETAIL</div>
+    <div class="fx-tabs" id="fxTabs"></div>
+    <div class="fx-body" id="fxBody"></div>
+  </div>
+
+  <!-- ===== CHANNEL STRIP EXPLAIN ===== -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <div class="sec-divider-label">🖥️ Urutan Kontrol Channel Strip</div>
+    <div class="sec-divider-line"></div>
+  </div>
+  <div class="strip-card">
+    <div class="strip-title">📋 URUTAN KONTROL TIAP CHANNEL (ATAS → BAWAH)</div>
+    <div style="margin-bottom:12px;font-size:10px;color:#8090a8;line-height:1.6">Setiap channel di Ashley Selection-8 memiliki urutan kontrol ini dari atas ke bawah:</div>
+    <div id="stripExplain"></div>
+  </div>
+
 </div>
 
 <script>
@@ -545,6 +685,453 @@ function buildTips(){
 
 window.addEventListener('load', init);
 window.addEventListener('resize', drawCurve);
+
+// ============================================================
+// TAMBAHAN: CHANNEL EQ HIGH / MID / LOW
+// ============================================================
+const CH_EQ = [
+  {
+    name:'HIGH', label:'Treble', color:'#f472b6',
+    freq:'8kHz – 12kHz',
+    desc:'Mengatur kecerahan suara. Putar kanan → suara lebih cerah & sparkle. Putar kiri → suara lebih gelap & teredam.',
+    tips:{
+      vokal:'Naikkan +2 sampai +3 untuk kejernihan vokal',
+      pidato:'Netral atau +1 saja, jangan terlalu cerah',
+      puisi:'Naikkan +3 untuk kesan dramatis dan terbuka',
+      nyanyi:'Naikkan +2, vokal wanita bisa lebih tinggi',
+      karaoke:'Naikkan +2~3 agar suara meriah',
+      dj:'Naikkan +3~4 agar cymbal dan hihat sparkle',
+      islamic:'Naikkan +2, suara terasa terbuka dan khusyuk',
+      sholawat:'Naikkan +2~3 untuk suara meriah',
+    },
+    presets:{vokal:6,pidato:5,puisi:8,nyanyi:7,karaoke:7,dj:8,islamic:7,sholawat:7}
+  },
+  {
+    name:'MID', label:'Middle', color:'#fbbf24',
+    freq:'500Hz – 3kHz',
+    desc:'Zona suara manusia. Putar kanan → suara lebih hadir & menonjol. Putar kiri → kurangi sengau atau kekerasan mid.',
+    tips:{
+      vokal:'Netral atau +1. Jika sengau, turunkan sedikit',
+      pidato:'Naikkan +1~2 agar artikulasi lebih jelas',
+      puisi:'Naikkan +1~2 untuk diksi yang dramatis',
+      nyanyi:'Netral, biarkan vokal natural',
+      karaoke:'+1 agar vokal hadir di atas musik',
+      dj:'Netral atau -1 agar tidak terlalu harsh',
+      islamic:'+1~2 agar makhraj huruf terdengar jelas',
+      sholawat:'+1 agar vokal terdengar jelas',
+    },
+    presets:{vokal:5,pidato:6,puisi:6,nyanyi:5,karaoke:6,dj:4,islamic:7,sholawat:6}
+  },
+  {
+    name:'LOW', label:'Bass', color:'#60a5fa',
+    freq:'80Hz – 250Hz',
+    desc:'Kehangatan dan tubuh suara. Putar kanan → suara lebih berat & bertenaga. Putar kiri → bersih dari dengung.',
+    tips:{
+      vokal:'Netral atau -1. Potong jika ada dengung mic',
+      pidato:'Netral. Ruangan besar → potong sedikit',
+      puisi:'Sedikit kehangatan, +1 saja',
+      nyanyi:'Netral, biarkan natural',
+      karaoke:'+1~2 agar suara terasa lebih fun',
+      dj:'+4~5 untuk bass yang nendang',
+      islamic:'Netral, untuk masjid potong -1~2',
+      sholawat:'+1 agar terasa hangat dan meriah',
+    },
+    presets:{vokal:4,pidato:4,puisi:5,nyanyi:5,karaoke:6,dj:9,islamic:4,sholawat:6}
+  }
+];
+
+// knob values 0-10 (5=center/netral)
+let chVals = [6,5,4];
+
+function buildChEq(){
+  const row = document.getElementById('chEqRow');
+  row.innerHTML = '';
+  CH_EQ.forEach((eq,i)=>{
+    const col = document.createElement('div');
+    col.className = 'ch-knob-col';
+    col.innerHTML = `
+      <div class="ch-knob-label" style="color:${eq.color}">${eq.name}</div>
+      <div class="ch-knob-wrap">
+        <canvas class="ch-arc" id="chArc${i}" width="60" height="60"></canvas>
+        <div class="ch-knob-ring" id="chKnob${i}" style="border-color:${eq.color}44">
+          <div class="ch-knob-dot" id="chDot${i}" style="background:${eq.color}"></div>
+        </div>
+      </div>
+      <div class="ch-knob-val" id="chVal${i}" style="color:${eq.color}">${chValLabel(chVals[i])}</div>
+      <div class="ch-knob-tip">${eq.label}<br><span style="color:#3a4460">${eq.freq}</span></div>
+    `;
+    row.appendChild(col);
+    drawChArc(i);
+
+    // Events
+    const ring = col.querySelector('.ch-knob-ring');
+    ring.addEventListener('mousedown', e=>startChDrag(e,i));
+    ring.addEventListener('touchstart', e=>startChDragT(e,i),{passive:false});
+    ring.addEventListener('click', ()=>showChDesc(i));
+  });
+  updateChPreset();
+}
+
+function chValLabel(v){
+  const db = Math.round((v-5)*2.4);
+  return (db>0?'+':'')+db+'dB';
+}
+
+function drawChArc(i){
+  const canvas = document.getElementById('chArc'+i);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=60,H=60,cx=30,cy=30,r=26;
+  ctx.clearRect(0,0,W,H);
+  // bg arc
+  ctx.beginPath(); ctx.arc(cx,cy,r,0.75*Math.PI,2.25*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,.07)'; ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
+  // value arc
+  const pct = chVals[i]/10;
+  const startA = 0.75*Math.PI, endA = startA + pct*1.5*Math.PI;
+  ctx.beginPath(); ctx.arc(cx,cy,r,startA,endA);
+  ctx.strokeStyle=CH_EQ[i].color; ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
+  // dot angle
+  const angle = startA + pct*1.5*Math.PI;
+  const dot = document.getElementById('chDot'+i);
+  if(dot){
+    const dx = Math.cos(angle)*18, dy = Math.sin(angle)*18;
+    dot.style.left=(30+dx-2)+'px'; dot.style.top=(30+dy-2)+'px'; dot.style.transform='none';
+  }
+  const val = document.getElementById('chVal'+i);
+  if(val){ val.textContent=chValLabel(chVals[i]); }
+}
+
+let chDrag=null,chDragY0=0,chDragV0=0;
+function startChDrag(e,i){e.preventDefault();chDrag=i;chDragY0=e.clientY;chDragV0=chVals[i];document.addEventListener('mousemove',onChDrag);document.addEventListener('mouseup',stopChDrag);}
+function startChDragT(e,i){e.preventDefault();chDrag=i;chDragY0=e.touches[0].clientY;chDragV0=chVals[i];document.addEventListener('touchmove',onChDragT,{passive:false});document.addEventListener('touchend',stopChDrag);}
+function onChDrag(e){if(chDrag===null)return;const dy=(chDragY0-e.clientY)/80*10;chVals[chDrag]=Math.max(0,Math.min(10,Math.round((chDragV0+dy)*2)/2));drawChArc(chDrag);}
+function onChDragT(e){e.preventDefault();if(chDrag===null)return;const dy=(chDragY0-e.touches[0].clientY)/80*10;chVals[chDrag]=Math.max(0,Math.min(10,Math.round((chDragV0+dy)*2)/2));drawChArc(chDrag);}
+function stopChDrag(){chDrag=null;document.removeEventListener('mousemove',onChDrag);document.removeEventListener('mouseup',stopChDrag);document.removeEventListener('touchmove',onChDragT);document.removeEventListener('touchend',stopChDrag);showChDesc(0);}
+
+function showChDesc(i){
+  const eq = CH_EQ[i];
+  const modeId = MODES[curMode].id;
+  const tip = eq.tips[modeId] || eq.desc;
+  document.getElementById('chEqDescText').innerHTML=`<strong style="color:${eq.color}">${eq.name} (${eq.freq})</strong><br>${eq.desc}<br><br><span style="color:var(--yellow)">💡 Untuk mode <b>${MODES[curMode].label}</b>:</span> ${tip}`;
+}
+
+function updateChPreset(){
+  const modeId = MODES[curMode].id;
+  const box = document.getElementById('chEqPreset');
+  box.innerHTML = '<div style="font-size:9px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Preset rekomendasi untuk mode ini:</div>'
+    + CH_EQ.map((eq,i)=>{
+      const pv = eq.presets[modeId]||5;
+      chVals[i] = pv;
+      const db = Math.round((pv-5)*2.4);
+      return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 9px;background:${eq.color}22;color:${eq.color};border:1px solid ${eq.color}44;border-radius:4px;font-size:10px;font-weight:700">${eq.name}: ${db>0?'+':''}${db}dB</span>`;
+    }).join('');
+  CH_EQ.forEach((_,i)=>drawChArc(i));
+}
+
+// ============================================================
+// TAMBAHAN: FADER SECTION
+// ============================================================
+const FADER_CHS = [
+  {name:'CH 1',color:'#60a5fa'},{name:'CH 2',color:'#60a5fa'},
+  {name:'CH 3',color:'#60a5fa'},{name:'CH 4',color:'#60a5fa'},
+  {name:'CH 5',color:'#34d399'},{name:'CH 6',color:'#34d399'},
+  {name:'CH 7',color:'#fbbf24'},{name:'CH 8',color:'#fbbf24'},
+  {name:'EFFECT',color:'#b57bee'},{name:'MP3/BT',color:'#fb923c'},
+  {name:'MAIN L',color:'#ff4455'},{name:'MAIN R',color:'#ff4455'},
+];
+
+const FADER_PRESETS = {
+  vokal:    [75,10,10,10,10,10,10,10,20,10,80,80],
+  pidato:   [80,10,10,10,10,10,10,10,15,5, 75,75],
+  puisi:    [75,10,10,10,10,10,10,10,25,5, 75,75],
+  nyanyi:   [75,65,10,10,10,10,10,10,30,40,80,80],
+  karaoke:  [70,70,10,10,10,10,10,10,35,65,80,80],
+  dj:       [10,10,10,10,10,10,10,10,10,85,85,85],
+  islamic:  [80,10,10,10,10,10,10,10,10,5, 70,70],
+  sholawat: [70,70,65,10,10,10,10,10,30,30,80,80],
+};
+
+let fVals = [...FADER_PRESETS.vokal];
+let fDrag=null,fDragY0=0,fDragV0=0;
+
+function buildFader(){
+  const row = document.getElementById('faderRow');
+  row.innerHTML='';
+  const modeId = MODES[curMode].id;
+  fVals = [...(FADER_PRESETS[modeId]||FADER_PRESETS.vokal)];
+  FADER_CHS.forEach((ch,i)=>{
+    const col = document.createElement('div');
+    col.className = 'fader-col';
+    const fillH = fVals[i]/100*96;
+    const topPct = (1-fVals[i]/100)*100;
+    col.innerHTML=`
+      <div class="fader-ch-name" style="color:${ch.color}">${ch.name}</div>
+      <div class="fader-track-v" id="ftr${i}">
+        <div class="fader-unity-lbl">U</div>
+        <div class="fader-unity"></div>
+        <div class="fader-fill-v" id="ffill${i}" style="height:${fillH}px;background:${ch.color};opacity:.35"></div>
+        <div class="fader-knob-v" id="fknob${i}" style="top:${topPct}%;background:${ch.color};box-shadow:0 2px 8px ${ch.color}55"></div>
+      </div>
+      <div class="fader-db-label" id="fdb${i}" style="color:${ch.color}">${fVals[i]}%</div>
+    `;
+    row.appendChild(col);
+    const tr = col.querySelector('.fader-track-v');
+    tr.addEventListener('mousedown',e=>startFDrag(e,i));
+    tr.addEventListener('touchstart',e=>startFDragT(e,i),{passive:false});
+  });
+  updateFaderGuide();
+}
+
+function updateFader(i){
+  const v=fVals[i];
+  const ch=FADER_CHS[i];
+  const topPct=(1-v/100)*100;
+  const fillH=v/100*96;
+  const kn=document.getElementById('fknob'+i);
+  const ff=document.getElementById('ffill'+i);
+  const fd=document.getElementById('fdb'+i);
+  if(kn){kn.style.transition='none';kn.style.top=topPct+'%';}
+  if(ff){ff.style.height=fillH+'px';}
+  if(fd){fd.textContent=v+'%';}
+}
+
+function startFDrag(e,i){e.preventDefault();fDrag=i;fDragY0=e.clientY;fDragV0=fVals[i];document.addEventListener('mousemove',onFDrag);document.addEventListener('mouseup',stopFDrag);}
+function startFDragT(e,i){e.preventDefault();fDrag=i;fDragY0=e.touches[0].clientY;fDragV0=fVals[i];document.addEventListener('touchmove',onFDragT,{passive:false});document.addEventListener('touchend',stopFDrag);}
+function onFDrag(e){if(fDrag===null)return;const h=document.getElementById('ftr'+fDrag).offsetHeight;const dy=(fDragY0-e.clientY)/h*100;fVals[fDrag]=Math.round(Math.max(0,Math.min(100,fDragV0+dy)));updateFader(fDrag);}
+function onFDragT(e){e.preventDefault();if(fDrag===null)return;const h=document.getElementById('ftr'+fDrag).offsetHeight;const dy=(fDragY0-e.touches[0].clientY)/h*100;fVals[fDrag]=Math.round(Math.max(0,Math.min(100,fDragV0+dy)));updateFader(fDrag);}
+function stopFDrag(){fDrag=null;document.removeEventListener('mousemove',onFDrag);document.removeEventListener('mouseup',stopFDrag);document.removeEventListener('touchmove',onFDragT);document.removeEventListener('touchend',stopFDrag);}
+
+function updateFaderGuide(){
+  const guides = {
+    vokal:'CH 1: Vokal utama naik tinggi (75-80%). CH lain kecil atau mati. EFFECT: 15-20% reverb tipis. MAIN L/R: 75-80%.',
+    pidato:'CH 1: Mic pembicara tinggi (80%). CH lain mati. EFFECT: Sangat kecil atau 0. MAIN: 70-75%.',
+    puisi:'CH 1: Pembaca puisi (75%). EFFECT: 20-25% reverb ringan. MP3/BT: Mati. MAIN: 70-75%.',
+    nyanyi:'CH 1-2: Vokal 70-75%. MP3/BT: 40% untuk iringan. EFFECT: 25-30%. MAIN: 80%.',
+    karaoke:'CH 1-2: Vokal 65-70%. MP3/BT: 65% musik. EFFECT: 30-35%. MAIN: 80%.',
+    dj:'CH 1-8: Mati semua. MP3/BT: 85% penuh. EFFECT: Minimal. MAIN: 85%.',
+    islamic:'CH 1: Mic muazin/ustadz (80%). Semua lain mati. EFFECT: 0 (masjid sudah ada akustik). MAIN: 70%.',
+    sholawat:'CH 1-2: Vokal 70%. CH 3: Rebana 65%. MP3/BT: 30%. EFFECT: 25-30%. MAIN: 80%.',
+  };
+  const modeId = MODES[curMode].id;
+  document.getElementById('faderGuide').innerHTML = (guides[modeId]||'Sesuaikan dengan kebutuhan acara.').replace(/\./g,'.<br>');
+}
+
+// ============================================================
+// TAMBAHAN: EFFECTS / FX SECTION
+// ============================================================
+const FX_LIST = [
+  {
+    id:'reverb', name:'REVERB', sub:'Hall / Room / Plate',
+    color:'#00c8ff', icon:'🏛️',
+    desc:'Menambah "ruang" pada suara. Seperti suara bergema di aula besar atau ruangan batu. Membuat suara terasa lebih luas, dalam, dan profesional.',
+    params:[
+      {n:'Reverb Time',v:'1.5 – 2.5s',tip:'Seberapa lama gema bertahan'},
+      {n:'Pre-Delay',v:'20 – 40ms',tip:'Jeda sebelum reverb muncul'},
+      {n:'Mix / Send',v:'20 – 35%',tip:'Seberapa banyak efek masuk ke mix'},
+    ],
+    when:'Vokal penyanyi, pembacaan puisi, sholawat, paduan suara, karaoke.',
+    warn:'JANGAN pakai untuk pidato formal dan tilawah quran di masjid. Reverb bikin kata-kata tidak jelas dan menambah echo ruangan.'
+  },
+  {
+    id:'delay', name:'DELAY', sub:'Echo / Repeat',
+    color:'#b57bee', icon:'🔁',
+    desc:'Mengulangi suara dengan jeda waktu tertentu. Seperti pantulan suara di pegunungan. Bisa membuat efek "echo" yang dramatis.',
+    params:[
+      {n:'Delay Time',v:'200 – 500ms',tip:'Jarak waktu antar pengulangan'},
+      {n:'Feedback',v:'1 – 3x',tip:'Berapa kali suara diulang'},
+      {n:'Mix',v:'15 – 25%',tip:'Volume efek delay'},
+    ],
+    when:'Vokal artistik, puisi dengan kesan dramatis, efek khusus penampilan.',
+    warn:'Hindari untuk pidato, ceramah, dan MC. Delay membuat kata-kata tertumpuk dan tidak jelas.'
+  },
+  {
+    id:'chorus', name:'CHORUS', sub:'Doubling / Thickening',
+    color:'#22d966', icon:'🎵',
+    desc:'Membuat suara terasa seperti dinyanyikan oleh beberapa orang sekaligus. Menambah ketebalan dan kehangatan pada vokal atau instrumen.',
+    params:[
+      {n:'Rate',v:'0.5 – 1.5Hz',tip:'Kecepatan modulasi chorus'},
+      {n:'Depth',v:'20 – 40%',tip:'Seberapa dalam efek'},
+      {n:'Mix',v:'20 – 30%',tip:'Campuran efek ke suara asli'},
+    ],
+    when:'Vokal solo agar terasa lebih tebal, koor, gitar akustik, keyboard.',
+    warn:'Terlalu banyak chorus membuat suara terasa "mengambang" dan tidak natural.'
+  },
+  {
+    id:'eq_fx', name:'PARAMETRIC EQ', sub:'Surgical EQ',
+    color:'#fbbf24', icon:'🔬',
+    desc:'EQ presisi tinggi dengan kontrol frekuensi, gain, dan bandwidth (Q) yang bisa diatur secara spesifik. Berbeda dari graphic EQ yang sudah fix frekuensinya.',
+    params:[
+      {n:'Frequency',v:'20Hz – 20kHz',tip:'Pilih frekuensi yang mau diubah'},
+      {n:'Gain',v:'±12 – 15dB',tip:'Naikkan atau turunkan'},
+      {n:'Q / Bandwidth',v:'0.5 – 10',tip:'Lebar atau sempit area yang dipengaruhi'},
+    ],
+    when:'Dipakai untuk semua situasi, terutama ketika perlu potong frekuensi masalah yang sangat spesifik.',
+    warn:'Lebih powerful dari graphic EQ, tapi lebih butuh pengalaman. Jangan asal boost tanpa tahu efeknya.'
+  },
+  {
+    id:'comp', name:'COMPRESSOR', sub:'Dynamic Control',
+    color:'#ff6b35', icon:'📉',
+    desc:'Mengontrol dinamika suara — membuat suara yang terlalu keras otomatis dikecilkan, dan yang terlalu pelan dinaikkan. Hasilnya suara lebih stabil dan konsisten.',
+    params:[
+      {n:'Threshold',v:'-18 s/d -6dB',tip:'Batas level suara mulai dikompres'},
+      {n:'Ratio',v:'2:1 – 4:1',tip:'Seberapa kuat kompresi bekerja'},
+      {n:'Attack/Release',v:'10ms / 100ms',tip:'Seberapa cepat compressor bereaksi'},
+    ],
+    when:'Vokal live agar level stabil, MC yang volumenya naik turun, instrumen bass.',
+    warn:'Ratio terlalu tinggi (8:1+) membuat suara terasa "mati" dan tidak natural.'
+  },
+  {
+    id:'gate', name:'NOISE GATE', sub:'Silence Filter',
+    color:'#f472b6', icon:'🚪',
+    desc:'Memotong suara secara otomatis ketika level di bawah ambang batas. Berguna untuk menghilangkan noise, dengung, atau suara background ketika tidak ada yang bicara/nyanyi.',
+    params:[
+      {n:'Threshold',v:'-40 s/d -20dB',tip:'Batas level suara mulai dibuka'},
+      {n:'Attack',v:'1 – 10ms',tip:'Seberapa cepat gate terbuka'},
+      {n:'Release',v:'100 – 300ms',tip:'Seberapa cepat gate menutup kembali'},
+    ],
+    when:'Mic di panggung yang banyak noise, drum recording, situasi outdoor berisik.',
+    warn:'Threshold terlalu tinggi → suara asli ikut terpotong dan terdengar putus-putus.'
+  },
+  {
+    id:'pitch', name:'PITCH SHIFTER', sub:'Voice Changer',
+    color:'#fb923c', icon:'🎭',
+    desc:'Mengubah nada suara tanpa mengubah tempo. Ashley Selection-8 memiliki efek pitch ringan untuk koreksi nada atau efek kreatif seperti suara robot, anak-anak, dll.',
+    params:[
+      {n:'Pitch',v:'±12 semitone',tip:'Naik atau turunkan nada'},
+      {n:'Mix',v:'50 – 100%',tip:'Campuran suara asli vs efek'},
+      {n:'Mode',v:'Harmony / Shift',tip:'Harmoni atau hanya geser nada'},
+    ],
+    when:'Efek kreatif, suara karakter MC, penyesuaian nada penyanyi.',
+    warn:'Bukan pengganti kemampuan bernyanyi yang baik. Terlalu banyak pitch shift terdengar tidak natural.'
+  },
+  {
+    id:'exc', name:'EXCITER', sub:'Harmonic Enhancer',
+    color:'#00e0c0', icon:'⚡',
+    desc:'Menambahkan harmonik buatan ke suara agar terdengar lebih "hidup", cerah, dan bersemangat. Bukan EQ, tapi menghasilkan frekuensi tambahan yang terdengar lebih sparkle.',
+    params:[
+      {n:'Frequency',v:'2kHz – 8kHz',tip:'Zona harmonik yang ditingkatkan'},
+      {n:'Drive',v:'20 – 50%',tip:'Seberapa kuat harmonik dihasilkan'},
+      {n:'Mix',v:'15 – 30%',tip:'Campuran efek'},
+    ],
+    when:'Vokal yang terdengar flat, suara rekaman tua yang kusam, instrumen yang kurang sparkle.',
+    warn:'Terlalu banyak exciter membuat suara terdengar keras dan lelah di telinga.'
+  },
+  {
+    id:'phantom', name:'PHANTOM POWER', sub:'+48V DC Power',
+    color:'#ff4455', icon:'⚡',
+    desc:'Bukan efek, tapi sumber daya listrik untuk mikrofon kondenser. Ashley Selection-8 memiliki tombol Phantom +48V. Mikrofon kondenser WAJIB dinyalakan ini agar bekerja.',
+    params:[
+      {n:'Voltage',v:'+48V DC',tip:'Standar internasional phantom power'},
+      {n:'Channel',v:'Global / All',tip:'Biasanya menyala untuk semua channel'},
+      {n:'Switch',v:'ON / OFF',tip:'Tombol tersendiri di mixer'},
+    ],
+    when:'Hanya untuk mikrofon KONDENSER. Mikrofon dynamic tidak memerlukan ini.',
+    warn:'JANGAN nyalakan phantom power ke mikrofon ribbon atau beberapa perangkat DI Box tertentu — bisa merusak!'
+  },
+];
+
+let curFx = 0;
+
+function buildFx(){
+  const tabs = document.getElementById('fxTabs');
+  tabs.innerHTML = '';
+  FX_LIST.forEach((fx,i)=>{
+    const t = document.createElement('button');
+    t.className='fx-tab'+(i===0?' on':'');
+    t.textContent=fx.icon+' '+fx.name;
+    t.style.color=i===0?fx.color:'';
+    t.style.borderColor=i===0?fx.color+'66':'';
+    t.onclick=()=>{curFx=i;renderFx();document.querySelectorAll('.fx-tab').forEach((b,j)=>{b.classList.toggle('on',j===i);b.style.color=j===i?FX_LIST[i].color:'';b.style.borderColor=j===i?FX_LIST[i].color+'66':'';});};
+    tabs.appendChild(t);
+  });
+  renderFx();
+}
+
+function renderFx(){
+  const fx = FX_LIST[curFx];
+  document.getElementById('fxBody').innerHTML=`
+    <div class="fx-name" style="color:${fx.color}">${fx.icon} ${fx.name}</div>
+    <div class="fx-sub">${fx.sub}</div>
+    <div class="fx-desc">${fx.desc}</div>
+    <div class="fx-params">
+      ${fx.params.map(p=>`
+        <div class="fx-param">
+          <div>
+            <div class="fx-param-name">${p.n}</div>
+            <div style="font-size:9px;color:var(--dim)">${p.tip}</div>
+          </div>
+          <div class="fx-param-val" style="color:${fx.color}">${p.v}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="fx-when">
+      <div class="fx-when-title">✅ Kapan Dipakai</div>
+      <div class="fx-when-list">${fx.when}</div>
+    </div>
+    ${fx.warn?`<div class="fx-warn">⚠️ ${fx.warn}</div>`:''}
+  `;
+}
+
+// ============================================================
+// TAMBAHAN: CHANNEL STRIP EXPLAIN
+// ============================================================
+const STRIP_ITEMS = [
+  {icon:'🎚️',name:'GAIN / TRIM',color:'#ff6b35',desc:'Penguat awal sinyal masuk dari mic/line. Atur sampai lampu signal menyala hijau, bukan merah. Ini yang pertama diatur sebelum EQ dan fader.'},
+  {icon:'📻',name:'HPF / LOW CUT',color:'#60a5fa',desc:'High Pass Filter — tombol untuk memotong semua frekuensi di bawah 80Hz. Aktifkan untuk vokal dan pidato agar tidak ada dengung mikrofon.'},
+  {icon:'🔴',name:'HIGH EQ',color:'#f472b6',desc:'Knob treble channel. Atur kecerahan suara. +3 untuk vokal wanita, netral untuk pria, -2 jika suara terlalu cempreng.'},
+  {icon:'🟡',name:'MID EQ',color:'#fbbf24',desc:'Knob mid channel. Zona kejelasan suara manusia. Biasanya netral. Turunkan jika sengau atau keras. Naikkan jika vokal kurang hadir.'},
+  {icon:'🔵',name:'LOW EQ',color:'#60a5fa',desc:'Knob bass channel. Kehangatan suara. Turunkan untuk pidato/vokal bersih. Naikkan untuk karaoke/DJ agar terasa lebih penuh.'},
+  {icon:'🟤',name:'AUX SEND',color:'#fb923c',desc:'Mengirim sinyal channel ini ke monitor panggung (in-ear monitor atau floor monitor). Atur sesuai permintaan performer di panggung.'},
+  {icon:'🟣',name:'FX SEND',color:'#b57bee',desc:'Seberapa banyak sinyal channel ini dikirim ke efek (reverb, delay, dll). Putar kanan = lebih banyak efek pada channel tersebut.'},
+  {icon:'⚫',name:'PAN',color:'#94a3b8',desc:'Mengatur posisi suara kiri-kanan (stereo field). Tengah untuk vokal/pidato. Geser kiri-kanan untuk instrumen agar mix terasa lebar.'},
+  {icon:'🔲',name:'ON/MUTE',color:'#22d966',desc:'Tombol mute channel. Tekan untuk matikan suara channel tanpa mengubah setting apapun. Berguna saat speaker/penyanyi belum siap.'},
+  {icon:'📶',name:'FADER CHANNEL',color:'#00c8ff',desc:'Volume akhir channel. Unity (0dB) biasanya di garis kuning. Untuk mic vokal biasanya di 70-80%. Main out di 75-85%.'},
+];
+
+function buildStripExplain(){
+  const cont = document.getElementById('stripExplain');
+  cont.innerHTML = STRIP_ITEMS.map((s,i)=>`
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;background:var(--panel);border-radius:7px;padding:9px 11px;border-left:3px solid ${s.color}">
+      <div style="font-size:20px;flex-shrink:0;margin-top:1px">${s.icon}</div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:${s.color};margin-bottom:3px;letter-spacing:.5px">${i+1}. ${s.name}</div>
+        <div style="font-size:10px;color:#8090a8;line-height:1.5">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Hook into existing selectMode to also refresh new sections
+const _origSelectMode = selectMode;
+function selectMode(i){
+  curMode = i;
+  vals = [...MODES[i].vals];
+  document.querySelectorAll('.mode-btn').forEach((b,j)=>{
+    b.classList.toggle('on', j===i);
+    b.style.color = j===i ? MODES[i].color : '';
+    b.style.borderColor = j===i ? MODES[i].color : '';
+  });
+  buildBands();
+  buildCards();
+  buildTroubles();
+  buildTips();
+  setDesc();
+  // Refresh new sections
+  updateChPreset();
+  buildFader();
+  showChDesc(0);
+}
+
+// Extend init
+const _origInit = init;
+window.addEventListener('load', ()=>{
+  buildChEq();
+  showChDesc(0);
+  buildFader();
+  buildFx();
+  buildStripExplain();
+});
 </script>
 </body>
 </html>
