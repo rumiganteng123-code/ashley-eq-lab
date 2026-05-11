@@ -3,203 +3,548 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultimate Ashley EQ Lab - Science & Tech</title>
+<title>Ashley EQ Guide</title>
 <style>
 :root{
-  --bg:#05070a;--panel:#0f1219;--border:#1e2433;--accent:#ff6b35;
-  --blue:#00c8ff;--green:#22d966;--red:#ff4455;--text:#e2e8f0;--dim:#64748b;
+  --bg:#0b0d12;--panel:#13161e;--panel2:#1a1e28;--border:#252a36;
+  --accent:#ff6b35;--blue:#00c8ff;--green:#22d966;--yellow:#ffd700;
+  --red:#ff4455;--purple:#b57bee;--pink:#ff6eb0;--teal:#00e0c0;
+  --text:#dde3ef;--dim:#5a6478;
 }
-*{margin:0;padding:0;box-sizing:border-box;user-select:none;}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:13px;padding-bottom:50px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh}
 
-/* HEADER TECH style */
-.hdr{background:linear-gradient(to bottom, #11151f, #05070a);padding:20px;text-align:center;border-bottom:2px solid var(--accent);box-shadow:0 0 20px rgba(255,107,53,0.2)}
-.hdr h1{font-size:18px;letter-spacing:3px;color:var(--accent)}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#0f1218 0%,#161b26 100%);border-bottom:1px solid var(--border);padding:16px;text-align:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.hdr-brand{font-size:9px;letter-spacing:5px;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
+.hdr-title{font-size:20px;font-weight:800;color:var(--accent);letter-spacing:1px}
+.hdr-sub{font-size:10px;color:var(--blue);letter-spacing:2px;margin-top:2px}
 
-/* AUDIO ENGINE SWITCH */
-.audio-ctrl{background:var(--panel);margin:10px;padding:15px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.btn-audio{padding:10px 20px;background:var(--accent);border:none;border-radius:5px;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 0 10px var(--accent)}
+/* MODE SELECTOR */
+.mode-wrap{padding:14px 12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mode-wrap::-webkit-scrollbar{height:3px}
+.mode-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.mode-scroll{display:flex;gap:8px;min-width:max-content;padding-bottom:4px}
+.mode-btn{
+  padding:8px 14px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--panel);color:var(--dim);font-size:11px;font-weight:600;
+  cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:.5px
+}
+.mode-btn.on{color:#fff;border-color:currentColor}
 
-/* EQ INTERFACE */
-.eq-container{background:var(--panel);margin:10px;padding:15px;border-radius:12px;border:1px solid var(--border)}
-.bands{display:flex;gap:5px;height:240px;align-items:flex-end;margin-bottom:20px}
-.band-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
-.track{width:35px;height:160px;background:#000;border-radius:4px;position:relative;border:1px solid var(--border)}
-.knob{width:100%;height:20px;background:var(--accent);position:absolute;left:0;border-radius:3px;cursor:grab;z-index:5;box-shadow:0 0 15px var(--accent)}
-.db-display{font-size:10px;font-weight:bold;margin-bottom:5px;color:var(--blue)}
-.freq-label{font-size:10px;margin-top:10px;font-weight:bold}
+/* MAIN CONTENT */
+.content{padding:12px}
 
-/* DYNAMIC ANALYSIS TEXT */
-.analysis-box{background:#000;padding:15px;margin:10px;border-radius:10px;border-left:4px solid var(--blue);min-height:80px}
-.analysis-title{font-size:11px;color:var(--dim);text-transform:uppercase;margin-bottom:5px}
-.analysis-text{font-size:14px;line-height:1.5;color:var(--text)}
+/* EQ VISUAL CARD */
+.eq-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.eq-card-title{font-size:11px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.eq-card-title span{font-size:16px}
 
-canvas{width:100%;height:80px;background:#000;border-radius:5px;margin-top:10px}
+/* BANDS */
+.bands{display:flex;gap:6px;align-items:flex-end;justify-content:center;margin-bottom:10px}
+.band-col{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.db-num{font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;min-height:16px}
+.track{
+  width:100%;max-width:38px;height:140px;
+  background:#0a0c10;border:1px solid var(--border);border-radius:4px;
+  position:relative;cursor:pointer;touch-action:none
+}
+.track-center{position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.1)}
+.track-fill{position:absolute;left:2px;right:2px;border-radius:3px;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.knob{
+  position:absolute;left:50%;transform:translateX(-50%) translateY(-50%);
+  width:calc(100% - 4px);height:18px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.1);
+  transition:top .35s cubic-bezier(.34,1.56,.64,1);cursor:grab
+}
+.knob::after{content:'';width:55%;height:2px;background:rgba(255,255,255,.35);border-radius:1px}
+.freq-lbl{font-size:9px;font-weight:700;text-align:center}
+.band-lbl{font-size:8px;color:var(--dim);text-align:center;line-height:1.3;min-height:22px;display:flex;align-items:center;justify-content:center}
+
+/* CURVE CANVAS */
+.curve-box{background:#080a0e;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+canvas{display:block;width:100%;height:80px}
+
+/* INFO SECTION */
+.info-section{margin-bottom:12px}
+.info-title{font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;padding:0 0 8px}
+.band-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.bcard{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px;border-left:3px solid}
+.bcard-freq{font-size:12px;font-weight:800}
+.bcard-name{font-size:9px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.bcard-action{font-size:10px;font-weight:700;margin-bottom:4px}
+.bcard-tip{font-size:10px;color:#8090a8;line-height:1.45}
+.bcard-db{display:inline-block;font-size:9px;font-weight:700;margin-top:5px;padding:2px 7px;border-radius:3px}
+
+/* TROUBLE */
+.trouble-title{font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;padding:0 0 8px}
+.t-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.t-item{background:var(--panel);border-radius:7px;padding:9px 10px;border-left:3px solid}
+.t-prob{font-size:10px;font-weight:700;margin-bottom:3px}
+.t-fix{font-size:9px;color:#8090a8;line-height:1.4}
+
+/* TIPS BOX */
+.tips-box{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.tips-box h3{font-size:11px;font-weight:700;margin-bottom:8px;letter-spacing:1px}
+.tip-item{display:flex;gap:6px;font-size:10px;color:#8090a8;margin-bottom:5px;line-height:1.4}
+.tip-icon{flex-shrink:0}
+
+/* DESCRIPTION */
+.mode-desc{background:var(--panel2);border-radius:8px;padding:12px;margin-bottom:12px;border-left:3px solid var(--accent)}
+.mode-desc p{font-size:11px;color:#8090a8;line-height:1.6}
+.mode-desc strong{color:var(--text)}
+
+/* GOLDEN RULES */
+.rules{background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(255,107,53,.03));border:1px solid rgba(255,107,53,.25);border-radius:10px;padding:14px;margin-bottom:12px}
+.rules h3{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:10px}
+.rule{font-size:10px;color:#8090a8;margin-bottom:6px;padding-left:12px;position:relative;line-height:1.5}
+.rule::before{content:'→';position:absolute;left:0;color:var(--accent)}
+
+@media(min-width:480px){
+  .band-cards{grid-template-columns:repeat(3,1fr)}
+  .t-grid{grid-template-columns:repeat(3,1fr)}
+  .track{height:160px}
+}
+@media(min-width:700px){
+  .content{max-width:680px;margin:0 auto}
+  .band-cards{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-    <h1>ASHLEY SELECTION-8</h1>
-    <p style="font-size:9px;color:var(--dim)">PRO AUDIO ANALYSIS LABORATORY</p>
+  <div class="hdr-brand">Ashley Selection-8 · Professional Mixer</div>
+  <div class="hdr-title">🎛️ EQ GUIDE LENGKAP</div>
+  <div class="hdr-sub">7-BAND GRAPHIC EQUALIZER</div>
 </div>
 
-<div class="audio-ctrl">
-    <div>
-        <div style="font-weight:bold">Audio Generator</div>
-        <div style="font-size:10px;color:var(--dim)">Dengarkan Frekuensi Nyata</div>
-    </div>
-    <button class="btn-audio" id="toggleAudio">MULAI AUDIO</button>
+<div class="mode-wrap">
+  <div class="mode-scroll" id="modeScroll"></div>
 </div>
 
-<div class="eq-container">
-    <div class="bands" id="bandCont"></div>
-    <canvas id="curve"></canvas>
-</div>
+<div class="content">
+  <div class="mode-desc" id="modeDesc"></div>
 
-<div class="analysis-box">
-    <div class="analysis-title">🔍 AI Real-time Analysis</div>
-    <div id="aiText" class="analysis-text">Geser slider untuk melihat efek pada suara...</div>
+  <div class="eq-card">
+    <div class="eq-card-title"><span>🎚️</span> POSISI SLIDER EQ — GESER UNTUK SIMULASI</div>
+    <div class="bands" id="bands"></div>
+    <div class="curve-box"><canvas id="cv"></canvas></div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-title">📋 Detail Setiap Band</div>
+    <div class="band-cards" id="bandCards"></div>
+  </div>
+
+  <div class="info-section">
+    <div class="trouble-title">⚡ Masalah & Solusi</div>
+    <div class="t-grid" id="troubles"></div>
+  </div>
+
+  <div class="tips-box" id="tipsBox"></div>
+
+  <div class="rules">
+    <h3>⭐ Hukum Emas EQ</h3>
+    <div class="rule">Lebih sering <strong>CUT (turunkan)</strong> yang bermasalah daripada BOOST semua</div>
+    <div class="rule">Selalu mulai dari posisi <strong>FLAT (0 semua)</strong> lalu adjust</div>
+    <div class="rule">Dengarkan dulu minimal 30 detik sebelum ubah apapun</div>
+    <div class="rule">Perubahan kecil ±2dB saja sudah terasa besar di sound system</div>
+    <div class="rule">Volume gain channel jangan terlalu tinggi → penyebab utama feedback</div>
+  </div>
 </div>
 
 <script>
 const BANDS = [
-    {f:'63Hz', n:'Sub', descL:'Bass hilang, suara tipis.', descH:'Gedeuk mantap, hati-hati speaker pecah!'},
-    {f:'160Hz', n:'Bass', descL:'Suara kering/flat.', descH:'Hangat, tapi kalau lebih suara jadi berdengung.'},
-    {f:'400Hz', n:'Low-Mid', descL:'Suara jernih, ruang terbuka.', descH:'Hati-hati! Suara jadi mendem/mengkungkung.'},
-    {f:'1kHz', n:'Mid', descL:'Vokal tenggelam.', descH:'Kejelasan kata meningkat, suara lebih "hadir".'},
-    {f:'2.5kHz', n:'Presence', descL:'Suara kusam.', descH:'Suara tajam dan tegas, bagus untuk artikulasi.'},
-    {f:'6.3kHz', n:'Detail', descL:'Kurang renyah.', descH:'Suara "Cis-Cis" keluar, sangat detail.'},
-    {f:'16kHz', n:'Air', descL:'Suara mati/tertutup.', descH:'Kilau kristal, suara terasa sangat mewah.'}
+  {freq:'63Hz', name:'Sub Bass', color:'#c084fc'},
+  {freq:'160Hz', name:'Bass Atas', color:'#60a5fa'},
+  {freq:'400Hz', name:'Low Mid', color:'#34d399'},
+  {freq:'1kHz', name:'Mid', color:'#fbbf24'},
+  {freq:'2.5kHz', name:'Presence', color:'#fb923c'},
+  {freq:'6.3kHz', name:'Detail', color:'#f472b6'},
+  {freq:'16kHz', name:'Air', color:'#a78bfa'},
 ];
 
-let vals = [0,0,0,0,0,0,0];
-let audioCtx = null;
-let oscillators = [];
-let gains = [];
-let isPlaying = false;
+const MODES = [
+  {
+    id:'vocal', label:'🎤 Vokal', color:'#00c8ff',
+    vals:[-5,-3,-4,+2,+2,+1,+2],
+    desc:'Untuk <strong>solo vokal, ceramah, pidato ringan</strong>. Fokus pada kejernihan suara manusia.',
+    bandInfo:[
+      {action:'TURUNKAN',tip:'Getaran fisik, tidak berguna untuk vokal manusia',db:'-5'},
+      {action:'TURUNKAN',tip:'Bikin suara mendem dan berat seperti dalam kardus',db:'-3'},
+      {action:'TURUNKAN ⚠️',tip:'KUNCI UTAMA! Hilangkan suara boxy dan keruh',db:'-4'},
+      {action:'NAIKKAN',tip:'Kejernihan kata-kata agar mudah dimengerti',db:'+2'},
+      {action:'NAIKKAN TIPIS',tip:'Kata-kata lebih keluar dan tegas, jangan lebih',db:'+2'},
+      {action:'NAIK TIPIS',tip:'Detail suara, kurangi jika ada desis S',db:'+1'},
+      {action:'NAIKKAN',tip:'Kilap suara, terasa terbuka dan elegan',db:'+2'},
+    ],
+    troubles:[
+      {p:'😶 Suara Mendem',f:'Turunkan 160Hz & 400Hz lebih dalam',c:'#fb923c'},
+      {p:'🔇 Kurang Jelas',f:'Naikkan 1kHz & 2.5kHz',c:'#00c8ff'},
+      {p:'😣 Cempreng',f:'Turunkan 2.5kHz atau 6.3kHz',c:'#ffd700'},
+      {p:'🔊 Desis S',f:'Turunkan 6.3kHz atau 16kHz',c:'#22d966'},
+    ],
+    tips:['Gain channel jaga di 60-70%','Jarak mic dari mulut ±15-20cm','Hindari mic langsung ke speaker','Gunakan HPF/Low Cut jika ada di channel']
+  },
+  {
+    id:'pidato', label:'🎙️ Pidato', color:'#22d966',
+    vals:[-6,-4,-5,+3,+3,+1,+1],
+    desc:'Untuk <strong>pidato formal, orasi, ceramah panjang</strong>. Setiap kata harus jelas didengar dari belakang.',
+    bandInfo:[
+      {action:'POTONG DALAM',tip:'Tidak perlu sama sekali untuk pidato',db:'-6'},
+      {action:'POTONG',tip:'Hilangkan kekeruhan suara ruangan',db:'-4'},
+      {action:'POTONG KUAT ⚠️',tip:'Wajib! Agar suara tidak terasa di dalam kotak',db:'-5'},
+      {action:'NAIKKAN',tip:'Kejelasan kata-kata, sangat penting untuk pidato',db:'+3'},
+      {action:'NAIKKAN',tip:'Artikulasi jelas, pendengar tidak perlu menebak',db:'+3'},
+      {action:'NETRAL',tip:'Biarkan netral, ruangan sudah cukup',db:'+1'},
+      {action:'TIPIS SAJA',tip:'Sedikit saja agar tidak lelah dengar lama',db:'+1'},
+    ],
+    troubles:[
+      {p:'🏛️ Echo Ruangan',f:'Turunkan 160-400Hz lebih dalam',c:'#fb923c'},
+      {p:'📢 Suara Pecah',f:'Kecilkan gain channel, turunkan main',c:'#ff4455'},
+      {p:'🎺 Suara Sengau',f:'Turunkan 500Hz-1kHz sedikit',c:'#ffd700'},
+      {p:'🔔 Feedback/Nguing',f:'Kecilkan gain, jauhkan mic dari speaker',c:'#ff4455'},
+    ],
+    tips:['Orator berpindah tempat → suara bisa berubah','Cek level sebelum acara mulai','Monitor volume dari tengah ruangan','Ruangan besar → turunkan 400Hz lebih dalam']
+  },
+  {
+    id:'puisi', label:'📜 Puisi/MC', color:'#b57bee',
+    vals:[-4,-3,-3,+2,+2,+2,+3],
+    desc:'Untuk <strong>pembacaan puisi, MC, storytelling</strong>. Butuh suara yang hangat tapi tetap jelas dan dramatis.',
+    bandInfo:[
+      {action:'TURUNKAN',tip:'Bersihkan dari dengung panggung',db:'-4'},
+      {action:'TURUNKAN',tip:'Sedikit kehangatan boleh, tapi jangan berlebihan',db:'-3'},
+      {action:'TURUNKAN',tip:'Bersihkan agar diksi terdengar jernih',db:'-3'},
+      {action:'NAIKKAN',tip:'Diksi jelas, sangat penting untuk puisi',db:'+2'},
+      {action:'NAIKKAN',tip:'Dramatisasi kata-kata, emosi tersampaikan',db:'+2'},
+      {action:'NAIKKAN',tip:'Detail ekspresi suara terdengar',db:'+2'},
+      {action:'NAIKKAN LEBIH',tip:'Suara terasa luas dan dramatis, cocok puisi',db:'+3'},
+    ],
+    troubles:[
+      {p:'🎭 Kurang Dramatis',f:'Naikkan 6.3kHz & 16kHz',c:'#b57bee'},
+      {p:'🗣️ Diksi Buram',f:'Naikkan 1kHz & 2.5kHz',c:'#00c8ff'},
+      {p:'💨 Suara Nafas',f:'Turunkan 63Hz, pasang windscreen mic',c:'#fb923c'},
+      {p:'🌫️ Suara Tipis',f:'Naikkan 160Hz tipis (+1dB)',c:'#22d966'},
+    ],
+    tips:['Pembaca puisi sering bergerak, atur posisi mic','Level lebih rendah dari karaoke normal','Reverb sedikit bisa membantu tapi jangan berlebihan','Test baca beberapa baris sebelum tampil']
+  },
+  {
+    id:'nyanyi', label:'🎵 Nyanyi', color:'#ff6eb0',
+    vals:[-4,-2,-3,+2,+2,+1,+2],
+    desc:'Untuk <strong>penyanyi tunggal atau koor</strong>. Balance antara kehangatan vokal dan kejernihan nada.',
+    bandInfo:[
+      {action:'TURUNKAN',tip:'Bersihkan sub yang mengganggu vokal',db:'-4'},
+      {action:'TURUNKAN TIPIS',tip:'Sedikit kehangatan boleh untuk vokal merdu',db:'-2'},
+      {action:'TURUNKAN',tip:'Bersihkan agar nada vokal tidak tertutup',db:'-3'},
+      {action:'NAIKKAN',tip:'Kejelasan nada dan melodi vokal',db:'+2'},
+      {action:'NAIKKAN',tip:'Vokal lebih hadir di atas iringan musik',db:'+2'},
+      {action:'TIPIS',tip:'Kejernihan vokal, hati-hati desis',db:'+1'},
+      {action:'NAIKKAN',tip:'Vokal terasa natural dan terbuka',db:'+2'},
+    ],
+    troubles:[
+      {p:'🎼 Tenggelam Musik',f:'Naikkan 1kHz-2.5kHz vokal',c:'#ff6eb0'},
+      {p:'😤 Suara Serak',f:'Turunkan 2.5kHz, tambah 160Hz tipis',c:'#ffd700'},
+      {p:'🎵 Fals Terdengar',f:'Itu masalah penyanyi, bukan EQ 😄',c:'#22d966'},
+      {p:'🔈 Vokal Tipis',f:'Naikkan 160Hz tipis & 1kHz',c:'#00c8ff'},
+    ],
+    tips:['Balance vokal vs iringan adalah kunci','Penyanyi wanita → bisa boost 16kHz lebih','Penyanyi pria dalam → 160Hz bisa +1dB','Koor → sedikit reverb buat menyatu']
+  },
+  {
+    id:'karaoke', label:'🎤 Karaoke', color:'#ffd700',
+    vals:[-3,-2,-2,+2,+2,+1,+2],
+    desc:'Untuk <strong>karaoke, hiburan umum</strong>. Setting yang fun, suara terasa meriah dan semangat.',
+    bandInfo:[
+      {action:'TURUNKAN',tip:'Bersihkan biar tidak gemuruh',db:'-3'},
+      {action:'TURUNKAN TIPIS',tip:'Sedikit bass boleh untuk feel musik',db:'-2'},
+      {action:'TURUNKAN TIPIS',tip:'Bersihkan sedikit agar tidak keruh',db:'-2'},
+      {action:'NAIKKAN',tip:'Vokal jelas di atas musik karaoke',db:'+2'},
+      {action:'NAIKKAN',tip:'Suara terasa hadir dan bersemangat',db:'+2'},
+      {action:'TIPIS',tip:'Kejernihan suara',db:'+1'},
+      {action:'NAIKKAN',tip:'Suara terasa meriah dan fun',db:'+2'},
+    ],
+    troubles:[
+      {p:'🎹 Musik vs Vokal',f:'Naikkan channel vokal, kecilkan musik',c:'#ffd700'},
+      {p:'🔊 Terlalu Keras',f:'Kecilkan main fader, bukan EQ',c:'#ff4455'},
+      {p:'📻 Musik Muffled',f:'Naikkan 2.5kHz di channel musik',c:'#00c8ff'},
+      {p:'🎵 Kurang Fun',f:'Boost 63Hz dan 16kHz tipis (+2dB)',c:'#22d966'},
+    ],
+    tips:['Musik backing track turunkan sedikit vs vokal','Reverb boleh lebih banyak untuk karaoke','Level mic jangan sampai clip (lampu merah)','Buat setting terpisah untuk penyanyi beda karakter']
+  },
+  {
+    id:'dj', label:'🎧 DJ/Musik', color:'#ff6b35',
+    vals:[+4,+3,-2,0,-1,0,+3],
+    desc:'Untuk <strong>putar musik, DJ, entertainment</strong>. Bass terasa, treble berkilap, mid dibersihkan agar tidak keruh.',
+    bandInfo:[
+      {action:'BOOST BASS 🔥',tip:'Kick dan sub bass terasa di dada, energi dancefloor',db:'+4'},
+      {action:'BOOST',tip:'Body dan warmth musik terasa penuh',db:'+3'},
+      {action:'TURUNKAN',tip:'Bersihkan mid bawah agar musik tidak lumpur',db:'-2'},
+      {action:'NETRAL',tip:'Mid biarkan natural sesuai rekaman',db:'0'},
+      {action:'TURUNKAN TIPIS',tip:'Kurangi kekerasan frekuensi tengah atas',db:'-1'},
+      {action:'NETRAL',tip:'Biarkan apa adanya',db:'0'},
+      {action:'BOOST TREBLE',tip:'Cymbal, hihat, kilap musik terasa sparkle',db:'+3'},
+    ],
+    troubles:[
+      {p:'💥 Bass Terlalu Lebay',f:'Turunkan 63Hz ke +2dB',c:'#ff6b35'},
+      {p:'🌫️ Musik Keruh',f:'Turunkan 160Hz & 400Hz',c:'#fbd700'},
+      {p:'🔇 Musik Flat',f:'Boost 63Hz & 16kHz lebih',c:'#00c8ff'},
+      {p:'📢 Speaker Distorsi',f:'Turunkan main fader, bukan naikkan EQ',c:'#ff4455'},
+    ],
+    tips:['Bass boost tergantung kemampuan speaker','Speaker kecil → jangan terlalu boost bass','Crossover/subwoofer aktif → 63Hz bisa lebih tinggi','Test di volume rendah dulu sebelum keras']
+  },
+  {
+    id:'islamic', label:'🕌 Islami', color:'#00e0c0',
+    vals:[-5,-3,-4,+3,+2,+1,+2],
+    desc:'Untuk <strong>adzan, tilawah quran, ceramah agama, sholawat</strong>. Suara harus jernih, khusyuk, dan tidak mengganggu.',
+    bandInfo:[
+      {action:'POTONG DALAM',tip:'Tidak perlu untuk suara tilawah dan adzan',db:'-5'},
+      {action:'POTONG',tip:'Hilangkan kekeruhan yang mengganggu kekhusyukan',db:'-3'},
+      {action:'POTONG KUAT',tip:'Wajib bersih! Suara quran harus kristal jernih',db:'-4'},
+      {action:'NAIKKAN',tip:'Makhraj huruf terdengar jelas dan benar',db:'+3'},
+      {action:'NAIKKAN',tip:'Irama tilawah terdengar indah dan tegas',db:'+2'},
+      {action:'TIPIS',tip:'Kejernihan detail suara',db:'+1'},
+      {action:'NAIKKAN',tip:'Suara terasa terbuka, cocok untuk masjid',db:'+2'},
+    ],
+    troubles:[
+      {p:'🕌 Echo Masjid',f:'Turunkan 160-400Hz, matikan reverb',c:'#00e0c0'},
+      {p:'🔔 Feedback Toa',f:'Kecilkan gain, cek posisi speaker',c:'#ff4455'},
+      {p:'😴 Suara Mendayu',f:'Naikkan 1kHz & 2.5kHz lebih',c:'#ffd700'},
+      {p:'📡 Suara Jauh',f:'Cek kabel mic dan koneksi',c:'#fb923c'},
+    ],
+    tips:['Masjid punya akustik khusus → kurangi 400Hz lebih','Untuk adzan luar → bass bisa sedikit lebih','Reverb/echo masjid sudah alami → jangan tambah efek','Tilawah quran → kejernihan adalah segalanya']
+  },
+  {
+    id:'sholawat', label:'🌙 Sholawat', color:'#ffd700',
+    vals:[-3,-1,-2,+2,+2,+1,+2],
+    desc:'Untuk <strong>sholawat, hadroh, rebana, qasidah</strong>. Perpaduan vokal dan musik perkusi yang seimbang.',
+    bandInfo:[
+      {action:'TURUNKAN',tip:'Bersihkan sub, rebana sudah cukup punchy',db:'-3'},
+      {action:'NETRAL TIPIS',tip:'Bass rebana terasa tapi tidak berlebihan',db:'-1'},
+      {action:'TURUNKAN',tip:'Bersihkan agar vokal tidak tertutup perkusi',db:'-2'},
+      {action:'NAIKKAN',tip:'Vokal sholawat jelas di atas rebana',db:'+2'},
+      {action:'NAIKKAN',tip:'Lirik terdengar jelas, emosi tersampaikan',db:'+2'},
+      {action:'TIPIS',tip:'Detail harmoni vokal terdengar',db:'+1'},
+      {action:'NAIKKAN',tip:'Suara terasa meriah dan penuh semangat',db:'+2'},
+    ],
+    troubles:[
+      {p:'🥁 Rebana Mendominasi',f:'Kecilkan channel rebana, naikkan vokal',c:'#ffd700'},
+      {p:'🎵 Vokal Tenggelam',f:'Naikkan 1kHz-2.5kHz channel vokal',c:'#00c8ff'},
+      {p:'💥 Perkusi Mbleduk',f:'Turunkan 63-160Hz channel rebana',c:'#ff6b35'},
+      {p:'🌊 Suara Ramai',f:'Turunkan 400Hz semua channel',c:'#22d966'},
+    ],
+    tips:['Rebana dan vokal di channel terpisah','Vokal utama level lebih tinggi dari backing','Harmonisasi vokal → sedikit reverb natural','Cek balance dari tengah jamaah']
+  },
+];
 
-function init() {
-    const cont = document.getElementById('bandCont');
-    BANDS.forEach((b, i) => {
-        const col = document.createElement('div');
-        col.className = 'band-col';
-        col.innerHTML = `
-            <div class="db-display" id="db-${i}">0 dB</div>
-            <div class="track" onmousedown="startDrag(event, ${i})" ontouchstart="startDrag(event, ${i})">
-                <div class="knob" id="knob-${i}" style="top:50%; transform:translateY(-50%)"></div>
-            </div>
-            <div class="freq-label" style="color:var(--accent)">${b.f}</div>
-            <div style="font-size:8px;color:var(--dim)">${b.n}</div>
-        `;
-        cont.appendChild(col);
-    });
-    updateUI();
+let curMode = 0;
+let vals = [...MODES[0].vals];
+let drag = null, dragY0 = 0, dragV0 = 0;
+
+function init(){
+  // Build mode buttons
+  const scroll = document.getElementById('modeScroll');
+  MODES.forEach((m,i)=>{
+    const b = document.createElement('button');
+    b.className = 'mode-btn' + (i===0?' on':'');
+    b.textContent = m.label;
+    b.style.setProperty('color', i===0 ? m.color : '');
+    b.style.setProperty('border-color', i===0 ? m.color : '');
+    b.onclick = ()=>selectMode(i);
+    scroll.appendChild(b);
+  });
+
+  buildBands();
+  buildCards();
+  buildTroubles();
+  buildTips();
+  setDesc();
 }
 
-function startDrag(e, index) {
-    const track = e.currentTarget;
-    const move = (ev) => {
-        const rect = track.getBoundingClientRect();
-        const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
-        let pos = (clientY - rect.top) / rect.height;
-        pos = Math.max(0, Math.min(1, pos));
-        vals[index] = Math.round((0.5 - pos) * 24);
-        updateUI();
-    };
-    const stop = () => {
-        window.removeEventListener('mousemove', move);
-        window.removeEventListener('mouseup', stop);
-        window.removeEventListener('touchmove', move);
-        window.removeEventListener('touchend', stop);
-    };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', stop);
-    window.addEventListener('touchmove', move, {passive:false});
-    window.addEventListener('touchend', stop);
+function selectMode(i){
+  curMode = i;
+  vals = [...MODES[i].vals];
+  document.querySelectorAll('.mode-btn').forEach((b,j)=>{
+    b.classList.toggle('on', j===i);
+    b.style.color = j===i ? MODES[i].color : '';
+    b.style.borderColor = j===i ? MODES[i].color : '';
+  });
+  buildBands();
+  buildCards();
+  buildTroubles();
+  buildTips();
+  setDesc();
 }
 
-function updateUI() {
-    let globalAnalysis = "";
-    vals.forEach((v, i) => {
-        const knob = document.getElementById(`knob-${i}`);
-        const db = document.getElementById(`db-${i}`);
-        knob.style.top = `${(1 - (v + 12) / 24) * 100}%`;
-        db.innerText = `${v > 0 ? '+' : ''}${v} dB`;
-        db.style.color = v > 8 ? 'var(--red)' : (v < -8 ? 'var(--dim)' : 'var(--blue)');
-        
-        if(Math.abs(v) > 3) {
-            globalAnalysis += `Pada <b>${BANDS[i].f}</b>: ${v > 0 ? BANDS[i].descH : BANDS[i].descL} `;
-        }
-        
-        if(isPlaying && gains[i]) {
-            const gainVal = Math.pow(10, v / 20) * 0.1;
-            gains[i].gain.setTargetAtTime(gainVal, audioCtx.currentTime, 0.1);
-        }
-    });
-
-    document.getElementById('aiText').innerHTML = globalAnalysis || "Semua frekuensi rata (Flat). Suara asli tanpa modifikasi.";
-    drawCurve();
+function setDesc(){
+  const m = MODES[curMode];
+  document.getElementById('modeDesc').innerHTML = `<p>Mode ini untuk: ${m.desc}</p>`;
+  document.getElementById('modeDesc').style.borderColor = m.color;
 }
 
-function drawCurve() {
-    const canvas = document.getElementById('curve');
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.offsetWidth;
-    const h = canvas.height = canvas.offsetHeight;
-    
-    ctx.clearRect(0,0,w,h);
-    ctx.strokeStyle = 'var(--accent)';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    
-    const points = vals.map((v, i) => ({
-        x: (i / 6) * (w - 40) + 20,
-        y: (1 - (v + 12) / 24) * h
-    }));
+function buildBands(){
+  const cont = document.getElementById('bands');
+  cont.innerHTML = '';
+  BANDS.forEach((b,i)=>{
+    const v = vals[i];
+    const col = b.color;
+    const topPct = (1 - (v+12)/24)*100;
+    const div = document.createElement('div');
+    div.className = 'band-col';
+    div.innerHTML = `
+      <div class="db-num" id="dbn${i}" style="color:${dbColor(v)}">${v>0?'+':''}${v}</div>
+      <div class="track" id="tr${i}">
+        <div class="track-center"></div>
+        <div class="track-fill" id="tf${i}" style="${fillStyle(v,col)}"></div>
+        <div class="knob" id="kn${i}" style="top:${topPct}%;background:${col};box-shadow:0 2px 10px ${col}55,0 0 0 1px rgba(255,255,255,.12)"></div>
+      </div>
+      <div class="freq-lbl" style="color:${col}">${b.freq}</div>
+      <div class="band-lbl">${b.name}</div>
+    `;
+    cont.appendChild(div);
 
-    ctx.moveTo(points[0].x, points[0].y);
-    for(let i=0; i<points.length-1; i++) {
-        var xc = (points[i].x + points[i+1].x) / 2;
-        var yc = (points[i].y + points[i+1].y) / 2;
-        ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
-    }
-    ctx.stroke();
+    // Events
+    const tr = div.querySelector('.track');
+    tr.addEventListener('mousedown', e=>startDrag(e,i));
+    tr.addEventListener('touchstart', e=>startDragT(e,i), {passive:false});
+  });
+  drawCurve();
 }
 
-document.getElementById('toggleAudio').onclick = function() {
-    if(!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const freqs = [63, 160, 400, 1000, 2500, 6300, 12000];
-        freqs.forEach((f, i) => {
-            let osc = audioCtx.createOscillator();
-            let g = audioCtx.createGain();
-            osc.frequency.value = f;
-            osc.type = 'sine';
-            g.gain.value = 0;
-            osc.connect(g);
-            g.connect(audioCtx.destination);
-            osc.start();
-            oscillators.push(osc);
-            gains.push(g);
-        });
-    }
+function dbColor(v){
+  if(v>=4) return '#22d966';
+  if(v>=1) return '#ffd700';
+  if(v===0) return '#5a6478';
+  if(v>=-3) return '#60a5fa';
+  return '#ff6b35';
+}
 
-    if(!isPlaying) {
-        audioCtx.resume();
-        this.innerText = "MATIKAN AUDIO";
-        this.style.background = "var(--red)";
-        isPlaying = true;
-        updateUI();
-    } else {
-        gains.forEach(g => g.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1));
-        this.innerText = "MULAI AUDIO";
-        this.style.background = "var(--accent)";
-        isPlaying = false;
-    }
-};
+function fillStyle(v, col){
+  if(v>0){
+    const h = (v/12)*50;
+    return `bottom:50%;height:${h}%;background:${col};opacity:.4;`;
+  }
+  if(v<0){
+    const h = (Math.abs(v)/12)*50;
+    return `top:50%;height:${h}%;background:${col};opacity:.25;`;
+  }
+  return 'display:none';
+}
 
-window.onload = init;
+function updateBand(i){
+  const v = vals[i]; const col = BANDS[i].color;
+  const topPct = (1-(v+12)/24)*100;
+  const kn = document.getElementById('kn'+i);
+  const tf = document.getElementById('tf'+i);
+  const dn = document.getElementById('dbn'+i);
+  if(kn){ kn.style.transition='none'; kn.style.top=topPct+'%'; }
+  if(tf) tf.style.cssText = fillStyle(v,col);
+  if(dn){ dn.style.color=dbColor(v); dn.textContent=(v>0?'+':'')+v; }
+  drawCurve();
+}
+
+function startDrag(e,i){
+  e.preventDefault(); drag=i; dragY0=e.clientY; dragV0=vals[i];
+  document.addEventListener('mousemove',onDrag);
+  document.addEventListener('mouseup',stopDrag);
+}
+function startDragT(e,i){
+  e.preventDefault(); drag=i; dragY0=e.touches[0].clientY; dragV0=vals[i];
+  document.addEventListener('touchmove',onDragT,{passive:false});
+  document.addEventListener('touchend',stopDrag);
+}
+function onDrag(e){
+  if(drag===null) return;
+  const h = document.getElementById('tr'+drag).offsetHeight;
+  const dy = (dragY0 - e.clientY)/h * 24;
+  vals[drag] = Math.round(Math.max(-12,Math.min(12,dragV0+dy)));
+  updateBand(drag);
+}
+function onDragT(e){
+  e.preventDefault();
+  if(drag===null) return;
+  const h = document.getElementById('tr'+drag).offsetHeight;
+  const dy = (dragY0 - e.touches[0].clientY)/h * 24;
+  vals[drag] = Math.round(Math.max(-12,Math.min(12,dragV0+dy)));
+  updateBand(drag);
+}
+function stopDrag(){ drag=null; document.removeEventListener('mousemove',onDrag); document.removeEventListener('mouseup',stopDrag); document.removeEventListener('touchmove',onDragT); document.removeEventListener('touchend',stopDrag); buildCards(); }
+
+function drawCurve(){
+  const cv = document.getElementById('cv');
+  const dpr = window.devicePixelRatio||1;
+  const W = cv.offsetWidth, H = cv.offsetHeight||80;
+  cv.width = W*dpr; cv.height = H*dpr;
+  const ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
+
+  ctx.fillStyle='#080a0e'; ctx.fillRect(0,0,W,H);
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1;
+  [.25,.5,.75].forEach(y=>{ ctx.beginPath(); ctx.moveTo(0,y*H); ctx.lineTo(W,y*H); ctx.stroke(); });
+  ctx.setLineDash([3,3]); ctx.strokeStyle='rgba(255,255,255,.1)';
+  ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke(); ctx.setLineDash([]);
+
+  const col = MODES[curMode].color;
+  const pts = vals.map((v,i)=>({ x:(i/(BANDS.length-1))*(W-30)+15, y:H/2-(v/12)*(H/2-8) }));
+
+  // Fill
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,col+'55'); g.addColorStop(.5,col+'15'); g.addColorStop(1,col+'00');
+  ctx.beginPath(); ctx.moveTo(pts[0].x,H/2); ctx.lineTo(pts[0].x,pts[0].y);
+  for(let i=0;i<pts.length-1;i++){ const mx=(pts[i].x+pts[i+1].x)/2; ctx.bezierCurveTo(mx,pts[i].y,mx,pts[i+1].y,pts[i+1].x,pts[i+1].y); }
+  ctx.lineTo(pts[pts.length-1].x,H/2); ctx.closePath(); ctx.fillStyle=g; ctx.fill();
+
+  // Line
+  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=0;i<pts.length-1;i++){ const mx=(pts[i].x+pts[i+1].x)/2; ctx.bezierCurveTo(mx,pts[i].y,mx,pts[i+1].y,pts[i+1].x,pts[i+1].y); }
+  ctx.strokeStyle=col; ctx.lineWidth=2; ctx.shadowColor=col; ctx.shadowBlur=8; ctx.stroke(); ctx.shadowBlur=0;
+
+  // Dots
+  pts.forEach((p,i)=>{ ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fillStyle=BANDS[i].color; ctx.shadowColor=BANDS[i].color; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0; });
+}
+
+function buildCards(){
+  const m = MODES[curMode];
+  const cont = document.getElementById('bandCards'); cont.innerHTML='';
+  BANDS.forEach((b,i)=>{
+    const info = m.bandInfo[i];
+    const v = vals[i];
+    const d = document.createElement('div');
+    d.className='bcard';
+    d.style.borderColor=b.color;
+    d.innerHTML=`
+      <div class="bcard-freq" style="color:${b.color}">${b.freq}</div>
+      <div class="bcard-name">${b.name}</div>
+      <div class="bcard-action" style="color:${dbColor(v)}">${info.action}</div>
+      <div class="bcard-tip">${info.tip}</div>
+      <div class="bcard-db" style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}44">${v>0?'+':''}${v} dB</div>
+    `;
+    cont.appendChild(d);
+  });
+}
+
+function buildTroubles(){
+  const m = MODES[curMode];
+  const cont = document.getElementById('troubles'); cont.innerHTML='';
+  m.troubles.forEach(t=>{
+    const d = document.createElement('div');
+    d.className='t-item'; d.style.borderColor=t.c;
+    d.innerHTML=`<div class="t-prob" style="color:${t.c}">${t.p}</div><div class="t-fix">${t.f}</div>`;
+    cont.appendChild(d);
+  });
+}
+
+function buildTips(){
+  const m = MODES[curMode];
+  const cont = document.getElementById('tipsBox');
+  cont.innerHTML=`<h3 style="color:${m.color}">💡 Tips Mode ${m.label}</h3>`
+    + m.tips.map(t=>`<div class="tip-item"><span class="tip-icon">•</span><span>${t}</span></div>`).join('');
+}
+
+window.addEventListener('load', init);
+window.addEventListener('resize', drawCurve);
 </script>
 </body>
 </html>
